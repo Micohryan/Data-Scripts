@@ -3,9 +3,12 @@ import pandas as pd
 import psycopg2
 import psycopg2.extras as extras
 import numpy as np
+from dotenv import load_dotenv
+import os
+import sys
+load_dotenv()
 
 def execute_values(conn, df, table):
-    print("hello")
     tuples = [tuple(x) for x in df.to_numpy()]
   
     cols = ','.join(list(df.columns))
@@ -42,7 +45,7 @@ def getColumnDtypes(dataTypes):
     return dataList
 
 # Reaf csv files into dataframe
-resultDF = pd.read_csv("sleepDay_merged.csv")
+resultDF = pd.read_csv("airlines_final.csv")
 
 # Collect column names into a list
 columnName = list(resultDF.columns.values)
@@ -57,12 +60,18 @@ for i in range(len(columnDataType)):
 createTableStatement = createTableStatement[:-1] + ' );'
 
 # Connect to database server to run create table statement
-conn = psycopg2.connect(
-    host="localhost",
-    database="mydatabase",
-    user="rm_user",
-    password="mypassword"
-)
+try:
+
+    conn = psycopg2.connect(
+        host= os.getenv("host"),
+        database= os.getenv("database"),
+        user=os.getenv("user"),
+        password=os.getenv("password")
+    )
+except:
+    print("Connection to database failed", file=sys.stderr)
+    sys.exit(-1)
+
 cur = conn.cursor()
 cur.execute(createTableStatement)
 execute_values(conn, resultDF, 'airlines_final1')

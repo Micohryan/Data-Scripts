@@ -1,6 +1,9 @@
 import psycopg2
 import pandas as pd
 import sys
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 def table_to_csv(sql, file_path, conn):
 
@@ -21,11 +24,11 @@ def table_to_csv(sql, file_path, conn):
 # connection parameter
 try:
     conn = psycopg2.connect(
-        host="localhost",
-        database="mydatabase",
-        user="rm_user",
-        password="mypassword"
-    )
+    host= os.getenv("host"),
+    database= os.getenv("database"),
+    user=os.getenv("user"),
+    password=os.getenv("password")
+)
 except:
     print("Connection to database failed", file=sys.stderr)
     sys.exit(-1)
