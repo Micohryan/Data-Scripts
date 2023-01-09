@@ -10,8 +10,8 @@ For a given CSV file creates a table in my local PostgreSQL database.
 ---
 
 ### `Database_to_CSV.py`
-
 For an PostgreSQL table converts the table into a CSV file in the current directory.
+
 ---
 
 ## Dependencies
